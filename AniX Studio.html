@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIX - Premium Streaming Platform</title>
+    <!-- Google Fonts & Remix Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #06070d;
+            --bg-surface: #0f111a;
+            --bg-surface-hover: #171a26;
+            --accent: #ff2a5f;
+            --accent-glow: rgba(255, 42, 95, 0.4);
+            --text-primary: #f5f6f8;
+            --text-secondary: #8a8f9f;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 80px 1fr;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar main";
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        aside {
+            grid-area: sidebar;
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .brand i {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-section h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding-left: 0.75rem;
+        }
+
+        .nav-btn, .discord-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: left;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--text-primary);
+            background-color: var(--bg-surface-hover);
+        }
+
+        .nav-btn.active {
+            border-left: 3px solid var(--accent);
+            background: linear-gradient(90deg, rgba(255, 42, 95, 0.1) 0%, transparent 100%);
+            color: var(--accent);
+        }
+
+        .discord-btn {
+            color: #5865F2;
+            background-color: rgba(88, 101, 242, 0.1);
+            margin-top: auto;
+            font-weight: 600;
+        }
+
+        .discord-btn:hover {
+            background-color: #5865F2;
+            color: white;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Mobile Categories Helper Bar - Hidden on Desktop */
+        .mobile-category-slider {
+            display: none;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            gap: 0.5rem;
+            scrollbar-width: none;
+        }
+        .mobile-category-slider::-webkit-scrollbar { display: none; }
+        .mobile-cat-chip {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+        .mobile-cat-chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* --- HEADER --- */
+        header {
+            grid-area: header;
+            background-color: rgba(6, 7, 13, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 3rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .upload-trigger-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            transition: var(--transition);
+        }
+
+        .upload-trigger-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* --- MAIN VIEWPORT --- */
+        main {
+            grid-area: main;
+            padding: 2.5rem 3rem;
+            overflow-y: auto;
+            background: radial-gradient(circle at 50% 0%, #121424 0%, var(--bg-main) 70%);
+        }
+
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HOME SLIDER SHOWCASE --- */
+        .home-slider {
+            width: 100%;
+            height: 380px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(90deg, #0f111a 0%, #16192b 100%);
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            align-items: flex-end;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(6, 7, 13, 1) 0%, rgba(6, 7, 13, 0.4) 50%, transparent 100%);
+            z-index: 1;
+        }
+
+        .slider-content {
+            position: relative;
+            z-index: 2;
+            padding: 3rem;
+            max-width: 600px;
+        }
+
+        .slider-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .slider-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            line-height: 1.2;
+        }
+
+        .slider-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .slider-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .empty-state-notice {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            border: 2px dashed rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-lg);
+            background: var(--bg-surface);
+        }
+
+        .empty-state-notice i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* --- MEDIA GRID --- */
+        .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .media-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .media-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 42, 95, 0.3);
+        }
+
+        .media-canvas {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(45deg, #16192b, #0b0c16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .media-canvas i {
+            font-size: 3rem;
+            color: white;
+            opacity: 0;
+            transition: var(--transition);
+            background: rgba(0,0,0,0.5);
+            padding: 1rem;
+            border-radius: 50%;
+            backdrop-filter: blur(4px);
+        }
+
+        .media-card:hover .media-canvas i {
+            opacity: 1;
+        }
+
+        .media-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            z-index: 2;
+        }
+
+        .media-meta { padding: 1.25rem; }
+        .media-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .media-sub { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* --- GLOBAL SEARCH CONTROLS --- */
+        .search-wrapper {
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            position: relative;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 1.25rem; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        /* --- CINEMATIC PLAYBACK STUDIO LAYOUT --- */
+        .cinema-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .cinema-layout.full-width-player {
+            grid-template-columns: 1fr;
+        }
+
+        .video-container {
+            background: black;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        .fullscreen-overlay-btn {
+            position: absolute;
+            bottom: 1rem;
+            right: 4.5rem;
+            background: rgba(15, 17, 26, 0.85);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .fullscreen-overlay-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .playlist-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 540px;
+            transition: var(--transition);
+        }
+
+        .episode-stack {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .ep-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem;
+            background: var(--bg-main);
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ep-row:hover, .ep-row.active {
+            border-color: var(--accent);
+            background: var(--bg-surface-hover);
+        }
+
+        .ep-row.active i { color: var(--accent); }
+
+        /* --- MODAL FORMS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(4, 5, 10, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0; pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal-window {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem; right: 1.5rem;
+            background: none; border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem; cursor: pointer;
+        }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-secondary); text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.85rem 1rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: white; font-size: 0.95rem; }
+        .form-group textarea { resize: none; height: 70px; }
+
+        /* Dynamic form tracking rows */
+        .episode-input-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 40px;
+            gap: 10px;
+            align-items: center;
+            background: var(--bg-main);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+        }
+        .episode-input-row span { font-size: 0.85rem; font-weight: bold; color: var(--accent); text-align: center;}
+        .remove-ep-btn { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem; }
+
+        /* Admin Action Tab Toggles */
+        .studio-tab-bar {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .studio-tab {
+            background: none; border: none; color: var(--text-secondary);
+            font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            padding: 0.5rem 0.25rem; position: relative;
+        }
+        .studio-tab.active { color: var(--accent); }
+        .studio-tab.active::after {
+            content: ''; position: absolute; bottom: -9px; left: 0; width: 100%; height: 2px; background: var(--accent);
+        }
+
+        /* ==========================================================================
+           RESPONSIVE MOBILE BREAKPOINTS CODE GRID ARCHITECTURE
+           ========================================================================== */
+        @media (max-width: 991px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 60px;
+                grid-template-areas: 
+                    "header"
+                    "main";
+                height: 100vh;
+            }
+
+            /* Move sidebar to become a modern responsive bottom action menu row */
+            aside {
+                position: fixed;
+                bottom: 0; left: 0; width: 100vw;
+                height: 65px;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0 1rem;
+                background: rgba(15, 17, 26, 0.96);
+                backdrop-filter: blur(20px);
+                border-right: none;
+                border-top: 1px solid var(--border-color);
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+                grid-area: none;
+                gap: 0;
+            }
+
+            aside .brand, aside .nav-section h4, aside .discord-btn {
+                display: none; /* Hide desktop elements on compact layouts */
+            }
+
+            aside .nav-section {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-around;
+                gap: 0;
+            }
+
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                flex-direction: column;
+                gap: 4px;
+                font-size: 0.75rem;
+                align-items: center;
+                text-align: center;
+                color: var(--text-secondary);
+                border-left: none !important;
+                background: none !important;
+            }
+
+            .nav-btn i {
+                font-size: 1.25rem;
+            }
+
+            .nav-btn.active {
+                color: var(--accent);
+            }
+
+            /* Show mobile specific rolling horizontal category tags */
+            .mobile-category-slider {
+                display: flex;
+            }
+
+            header {
+                grid-area: header;
+                padding: 1rem;
+                height: 70px;
+                background-color: var(--bg-surface);
+                justify-content: center; /* Center admin action tool button */
+            }
+
+            .upload-trigger-btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.9rem;
+            }
+
+            main {
+                padding: 1.5rem 1rem 5rem 1rem; /* Added bottom buffer to avoid navbar overlaps */
+                background: var(--bg-main);
+            }
+
+            .home-slider {
+                height: 250px;
+                margin-bottom: 1.5rem;
+            }
+
+            .slider-content {
+                padding: 1.5rem;
+            }
+
+            .slider-title {
+                font-size: 1.6rem;
+            }
+
+            .slider-desc {
+                font-size: 0.85rem;
+                margin-bottom: 1rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .slider-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            .premium-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .media-canvas {
+                height: 210px;
+            }
+
+            /* Responsive Cinema Pipeline Stacks */
+            .cinema-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .playlist-card {
+                height: 320px;
+            }
+
+            /* Modal Scalings */
+            .modal-window {
+                padding: 1.5rem;
+                width: 92%;
+                max-height: 85vh;
+            }
+
+            .studio-tab {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR COMPONENT (BECOMES BOTTOM NAV ON MOBILE) -->
+    <aside>
+        <div class="brand">
+            <i class="ri-flashlight-fill"></i>
+            <span>ANIX STUDIO</span>
+        </div>
+        
+        <div class="nav-section">
+            <h4>Discover</h4>
+            <button class="nav-btn active" onclick="Router.go('home')" id="m-home"><i class="ri-home-5-line"></i> Home</button>
+            <button class="nav-btn" onclick="Router.go('all')" id="m-all"><i class="ri-clapperboard-line"></i> View All</button>
+            <button class="nav-btn" onclick="Router.go('search')" id="m-search"><i class="ri-search-2-line"></i> Search</button>
+        </div>
+
+        <div class="nav-section">
+            <h4>Categories</h4>
+            <button class="nav-btn" onclick="Engine.setCategory('Action')">⚔️ Action</button>
+            <button class="nav-btn" onclick="Engine.setCategory('Romantic')">💖 Romantic</button>
+            <button class="nav-btn" onclick="Engine.setCategory('Comedy')">😂 Comedy</button>
+            <button class="nav-btn" onclick="Engine.setCategory('Fantasy')">🔮 Fantasy</button>
+            <button class="nav-btn" onclick="Engine.setCategory('Movies')">🎬 Movies</button>
+            <button class="nav-btn" onclick="Engine.setCategory('18+')">🔞 18+</button>
+        </div>
+
+        <!-- DISCORD INTEGRATION LINK -->
+        <a href="https://discord.gg/TSzgpG8afH" target="_blank" class="discord-btn">
+            <i class="ri-discord-fill"></i> Join Our Discord
+        </a>
+    </aside>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <div class="user-profile" style="width: 100%; max-width: 400px;">
+            <button class="upload-trigger-btn" onclick="AdminGate.verify()">
+                <i class="ri-folder-add-line"></i> Admin Media Studio
+            </button>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL MOBILE NAVIGATION TAG BAR -->
+    <div class="mobile-category-slider">
+        <div class="mobile-cat-chip active" onclick="Engine.setMobileCategory(this, 'All')">All Streams</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, 'Action')">⚔️ Action</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, 'Romantic')">💖 Romantic</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, 'Comedy')">😂 Comedy</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, 'Fantasy')">🔮 Fantasy</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, 'Movies')">🎬 Movies</div>
+        <div class="mobile-cat-chip" onclick="Engine.setMobileCategory(this, '18+')">🔞 18+</div>
+    </div>
+
+    <!-- SYSTEM CORE VIEW DISPLAY MATRIX -->
+    <main>
+        <div id="view-home" class="view-panel active">
+            <!-- DYNAMIC HERO SLIDER -->
+            <div class="home-slider" id="home-featured-slider">
+                <div class="slider-overlay"></div>
+                <div class="slider-content" id="slider-inner-content"></div>
+            </div>
+
+            <div class="section-header">
+                <h2>Best Anime</h2>
+            </div>
+            <div class="premium-grid" id="container-recent"></div>
+        </div>
+
+        <div id="view-all" class="view-panel">
+            <div class="section-header">
+                <h2 id="all-view-title">Dynamic Archive System</h2>
+            </div>
+            <div class="premium-grid" id="container-library"></div>
+        </div>
+
+        <div id="view-search" class="view-panel">
+            <div class="search-wrapper">
+                <i class="ri-search-2-line"></i>
+                <input type="text" class="search-input" id="search-query-field" placeholder="Query database records..." oninput="Engine.execSearch()">
+            </div>
+            <div class="section-header">
+                <h2 id="search-output-header">Database Query Results</h2>
+            </div>
+            <div class="premium-grid" id="container-search-results" style="margin-bottom: 4rem;"></div>
+
+            <div class="section-header">
+                <h2>Contextual Discoveries</h2>
+            </div>
+            <div class="premium-grid" id="container-search-fallback"></div>
+        </div>
+
+        <div id="view-watch" class="view-panel">
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h2 id="cinema-stream-title" style="font-size: 1.4rem;">Loading Stream Pipeline...</h2>
+            </div>
+            <div class="cinema-layout" id="cinema-layout-box">
+                <div class="video-container">
+                    <video id="player-engine" controls autoplay playsinline></video>
+                    <button class="fullscreen-overlay-btn" onclick="Engine.goFullScreen()"><i class="ri-fullscreen-fill"></i> Fullscreen</button>
+                </div>
+                <div class="playlist-card" id="cinema-playlist-card">
+                    <h3 style="margin-bottom:1.25rem; display: flex; justify-content: space-between; font-size: 1.1rem;">
+                        <span>Pipeline Fragments</span>
+                        <span id="episodes-count-badge" style="color:var(--accent); font-size:0.85rem;">0 Elements</span>
+                    </h3>
+                    <div class="episode-stack" id="container-pipeline-episodes"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AUTHORIZED UPLOAD MODAL -->
+    <div class="modal-overlay" id="upload-modal">
+        <div class="modal-window" style="max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" onclick="UI.toggleModal(false)"><i class="ri-close-line"></i></button>
+            
+            <div class="studio-tab-bar">
+                <button class="studio-tab active" id="tab-create" onclick="UI.switchAdminTab('create')">Create New</button>
+                <button class="studio-tab" id="tab-update" onclick="UI.switchAdminTab('update')">Add Ep</button>
+                <button class="studio-tab" id="tab-hero" onclick="UI.switchAdminTab('hero')">Slider</button>
+            </div>
+
+            <!-- TAB CONTAINER 1: INITIATE ENTIRE NEW ENTRY -->
+            <div id="pane-admin-create">
+                <div class="form-group">
+                    <label>Asset Title Name</label>
+                    <input type="text" id="form-asset-title" placeholder="e.g., Chainsaw Demon">
+                </div>
+
+                <div class="form-group">
+                    <label>Thumbnail / Poster Cover</label>
+                    <input type="file" id="form-asset-poster" accept="image/*">
+                </div>
+                
+                <div class="form-group">
+                    <label>System Classification Tag</label>
+                    <select id="form-asset-tag" onchange="UI.toggleUploadTypeMode()">
+                        <option value="Action">Action</option>
+                        <option value="Romantic">Romantic</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Movies">Movies</option>
+                        <option value="18+">18+</option>
+                    </select>
+                </div>
+
+                <div id="wrapper-episodes-allocation">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Episodes Allocation</label>
+                        <button type="button" onclick="UI.addEpisodeRowSlot()" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:4px 10px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold;">
+                            + Add File
+                        </button>
+                    </div>
+                    <div id="dynamic-episodes-form-container"></div>
+                </div>
+
+                <button class="upload-trigger-btn" style="width: 100%; justify-content: center; margin-top: 1.5rem;" onclick="Engine.commitUpload()">
+                    Deploy Asset Package
+                </button>
+            </div>
+
+            <!-- TAB CONTAINER 2: UPDATE RECENT FRAGMENT EPISODES TO ONGOING POSTS -->
+            <div id="pane-admin-update" style="display: none;">
+                <div class="form-group">
+                    <label>Select Target Anime Series</label>
+                    <select id="form-update-select-target"></select>
+                </div>
+
+                <div class="form-group" style="background: var(--bg-main); padding: 1rem; border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+                    <label id="lbl-next-ep-prediction" style="color: var(--accent);">Next Allocation Unit: EP 01</label>
+                    <input type="file" id="form-ongoing-new-file" accept="video/*" style="margin-top: 0.5rem;">
+                </div>
+
+                <button class="upload-trigger-btn" style="width: 100%; justify-content: center; margin-top: 1.5rem;" onclick="Engine.commitOngoingEpisodeAppend()">
+                    Push New Episode Live
+                </button>
+            </div>
+
+            <!-- TAB CONTAINER 3: HERO HOME SLIDER MANAGER CONTROLS -->
+            <div id="pane-admin-hero" style="display: none;">
+                <div class="form-group">
+                    <label>Select Anime for Slider</label>
+                    <select id="form-hero-select-target"></select>
+                </div>
+                <div class="form-group">
+                    <label>Showcase Description</label>
+                    <textarea id="form-hero-desc" placeholder="Enter custom summary details..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Landscape Banner Image Backdrop</label>
+                    <input type="file" id="form-hero-banner" accept="image/*">
+                </div>
+                <button class="upload-trigger-btn" style="width: 100%; justify-content: center; margin-top: 1.5rem;" onclick="Engine.updateHeroSliderConfiguration()">
+                    Apply Configuration Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MAIN APP PROGRAM SCRIPTS -->
+    <script>
+        const AdminGate = {
+            secretKey: "Hacker@Alpha",
+            verify() {
+                const input = prompt("Security Authentication Required.\nEnter Admin Access Password Key:");
+                if (input === this.secretKey) {
+                    UI.toggleModal(true);
+                } else if (input !== null) {
+                    alert("Access Denied: Invalid Security Signature.");
+                }
+            }
+        };
+
+        // DATABASE STORAGE STARTING ENTIRELY EMPTY AS REQUESTED
+        const DB = {
+            store: [],
+            heroSliderConfig: {
+                targetId: null,
+                customDescription: "",
+                bannerUrl: ""
+            }
+        };
+
+        let systemActiveCategory = "All";
+        let uploadEpisodeCounter = 0;
+
+        const Router = {
+            go(targetViewId) {
+                document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.nav-section .nav-btn').forEach(el => el.classList.remove('active'));
+                
+                const activePanel = document.getElementById(`view-${targetViewId}`);
+                if(activePanel) activePanel.classList.add('active');
+                
+                const activeMenuBtn = document.getElementById(`m-${targetViewId}`);
+                if(activeMenuBtn) activeMenuBtn.classList.add('active');
+
+                if(targetViewId === 'search') Engine.execSearch();
+                
+                // Keep mobile layout header viewport scrolled to the top automatically on view changes
+                document.querySelector('main').scrollTop = 0;
+            }
+        };
+
+        const UI = {
+            toggleModal(displayState) {
+                const modal = document.getElementById('upload-modal');
+                if(displayState) {
+                    modal.classList.add('active');
+                    this.switchAdminTab('create'); 
+                } else {
+                    modal.classList.remove('active');
+                }
+            },
+            switchAdminTab(tabMode) {
+                document.querySelectorAll('.studio-tab').forEach(t => t.classList.remove('active'));
+                document.getElementById('pane-admin-create').style.display = 'none';
+                document.getElementById('pane-admin-update').style.display = 'none';
+                document.getElementById('pane-admin-hero').style.display = 'none';
+
+                if(tabMode === 'create') {
+                    document.getElementById('tab-create').classList.add('active');
+                    document.getElementById('pane-admin-create').style.display = 'block';
+                    
+                    document.getElementById('dynamic-episodes-form-container').innerHTML = '';
+                    document.getElementById('form-asset-poster').value = '';
+                    uploadEpisodeCounter = 0;
+                    this.addEpisodeRowSlot();
+                } else if(tabMode === 'update') {
+                    document.getElementById('tab-update').classList.add('active');
+                    document.getElementById('pane-admin-update').style.display = 'block';
+                    this.populateOngoingSelectDropdown();
+                } else if(tabMode === 'hero') {
+                    document.getElementById('tab-hero').classList.add('active');
+                    document.getElementById('pane-admin-hero').style.display = 'block';
+                    this.populateHeroSliderSelectDropdown();
+                }
+            },
+            populateOngoingSelectDropdown() {
+                const selectMenu = document.getElementById('form-update-select-target');
+                selectMenu.innerHTML = '';
+                
+                const activeSeries = DB.store.filter(item => item.type === "Series");
+                if(activeSeries.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.innerText = "No Anime Created Yet";
+                    selectMenu.appendChild(opt);
+                    document.getElementById('lbl-next-ep-prediction').innerText = "Next Allocation Unit: N/A";
+                    return;
+                }
+
+                activeSeries.forEach((series, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = series.id;
+                    opt.innerText = series.title;
+                    if(idx === 0) opt.selected = true;
+                    selectMenu.appendChild(opt);
+                });
+
+                selectMenu.onchange = () => this.updateOngoingLabelSequence();
+                this.updateOngoingLabelSequence();
+            },
+            populateHeroSliderSelectDropdown() {
+                const selectMenu = document.getElementById('form-hero-select-target');
+                selectMenu.innerHTML = '';
+                
+                if(DB.store.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.innerText = "No Anime Created Yet";
+                    selectMenu.appendChild(opt);
+                    return;
+                }
+
+                DB.store.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.innerText = `[${item.genre}] ${item.title}`;
+                    if(item.id === DB.heroSliderConfig.targetId) opt.selected = true;
+                    selectMenu.appendChild(opt);
+                });
+
+                document.getElementById('form-hero-desc').value = DB.heroSliderConfig.customDescription;
+                document.getElementById('form-hero-banner').value = '';
+            },
+            updateOngoingLabelSequence() {
+                const targetEl = document.getElementById('form-update-select-target');
+                if(!targetEl.value) return;
+                
+                const targetId = parseInt(targetEl.value);
+                const matchedItem = DB.store.find(el => el.id === targetId);
+                if(matchedItem) {
+                    const nextNumber = matchedItem.episodes.length + 1;
+                    document.getElementById('lbl-next-ep-prediction').innerText = `Next Allocation Unit: EP ${String(nextNumber).padStart(2, '0')}`;
+                }
+            },
+            toggleUploadTypeMode() {
+                const genreSelection = document.getElementById('form-asset-tag').value;
+                const headerText = document.querySelector('#wrapper-episodes-allocation label');
+                const appendBtn = document.querySelector('#wrapper-episodes-allocation button');
+
+                if(genreSelection === "Movies") {
+                    headerText.innerText = "Movie Media File Asset";
+                    appendBtn.style.display = "none";
+                    document.getElementById('dynamic-episodes-form-container').innerHTML = '';
+                    uploadEpisodeCounter = 0;
+                    this.addEpisodeRowSlot(true);
+                } else {
+                    headerText.innerText = "Series Episode Allocation";
+                    appendBtn.style.display = "block";
+                }
+            },
+            addEpisodeRowSlot(isMovieMode = false) {
+                uploadEpisodeCounter++;
+                const container = document.getElementById('dynamic-episodes-form-container');
+                const row = document.createElement('div');
+                row.className = 'episode-input-row';
+                row.id = `upload-ep-row-${uploadEpisodeCounter}`;
+                
+                const labelText = isMovieMode ? "Movie" : `EP ${String(uploadEpisodeCounter).padStart(2, '0')}`;
+                
+                row.innerHTML = `
+                    <span>${labelText}</span>
+                    <input type="file" class="upload-episode-file-input" accept="video/*" data-epname="${labelText}">
+                    ${isMovieMode ? '<div></div>' : `<button type="button" class="remove-ep-btn" onclick="UI.removeEpisodeRowSlot(${uploadEpisodeCounter})"><i class="ri-delete-bin-line"></i></button>`}
+                `;
+                container.appendChild(row);
+            },
+            removeEpisodeRowSlot(rowId) {
+                const row = document.getElementById('upload-ep-row-' + rowId);
+                if(row) row.remove();
+            },
+            buildCard(item) {
+                const card = document.createElement('div');
+                card.className = 'media-card';
+                card.onclick = () => Engine.bootCinemaMode(item);
+                const posterBackground = item.poster ? `style="background-image: url('${item.poster}');"` : '';
+                card.innerHTML = `
+                    <div class="media-canvas" ${posterBackground}>
+                        <span class="media-tag">${item.genre}</span>
+                        <i class="ri-play-circle-fill"></i>
+                    </div>
+                    <div class="media-meta">
+                        <div class="media-title">${item.title}</div>
+                        <div class="media-sub">${item.episodes.length} Episodes Live</div>
+                    </div>
+                `;
+                return card;
+            },
+            buildEmptyNotice(msg) {
+                const div = document.createElement('div');
+                div.className = 'empty-state-notice';
+                div.innerHTML = `<i class="ri-folder-open-line"></i> ${msg}`;
+                return div;
+            }
+        };
+
+        const Engine = {
+            renderHeroSlider() {
+                const sliderEl = document.getElementById('home-featured-slider');
+                const contentEl = document.getElementById('slider-inner-content');
+                
+                const activeId = DB.heroSliderConfig.targetId;
+                const matchedAnime = DB.store.find(el => el.id === activeId);
+                
+                if (!matchedAnime) {
+                    sliderEl.style.display = 'none';
+                    return;
+                }
+
+                sliderEl.style.display = 'flex';
+
+                if (DB.heroSliderConfig.bannerUrl) {
+                    sliderEl.style.backgroundImage = `url('${DB.heroSliderConfig.bannerUrl}')`;
+                } else if (matchedAnime.poster) {
+                    sliderEl.style.backgroundImage = `url('${matchedAnime.poster}')`;
+                } else {
+                    sliderEl.style.backgroundImage = `linear-gradient(45deg, #16192b, #0b0c16)`;
+                }
+
+                contentEl.innerHTML = `
+                    <div class="slider-badge">${matchedAnime.genre} Showcase</div>
+                    <div class="slider-title">${matchedAnime.title}</div>
+                    <div class="slider-desc">${DB.heroSliderConfig.customDescription}</div>
+                    <button class="slider-btn" onclick="event.stopPropagation(); Engine.bootCinemaMode(DB.store.find(e => e.id == ${matchedAnime.id}))">
+                        <i class="ri-play-fill"></i> Stream Now
+                    </button>
+                `;
+            },
+            refreshViews() {
+                const recentBox = document.getElementById('container-recent');
+                const libraryBox = document.getElementById('container-library');
+                recentBox.innerHTML = '';
+                libraryBox.innerHTML = '';
+
+                if (DB.store.length === 0) {
+                    recentBox.appendChild(UI.buildEmptyNotice("No anime inside storage yet. Use the Admin Media Studio panel to submit streams."));
+                    libraryBox.appendChild(UI.buildEmptyNotice("No archived anime streams located in database registry layout."));
+                } else {
+                    const librarySet = DB.store.filter(el => systemActiveCategory === "All" || el.genre === systemActiveCategory);
+                    
+                    if(librarySet.length === 0) {
+                        libraryBox.appendChild(UI.buildEmptyNotice(`No anime uploads matching category tags for: ${systemActiveCategory}`));
+                    } else {
+                        librarySet.forEach(item => libraryBox.appendChild(UI.buildCard(item)));
+                    }
+
+                    DB.store.slice(0, 4).forEach(item => recentBox.appendChild(UI.buildCard(item)));
+                }
+                
+                this.renderHeroSlider();
+            },
+            setCategory(categoryName) {
+                systemActiveCategory = categoryName;
+                document.getElementById('all-view-title').innerText = `Category Hierarchy: ${categoryName}`;
+                Router.go('all');
+                this.refreshViews();
+            },
+            setMobileCategory(chipElement, categoryName) {
+                document.querySelectorAll('.mobile-cat-chip').forEach(c => c.classList.remove('active'));
+                chipElement.classList.add('active');
+                this.setCategory(categoryName);
+            },
+            commitUpload() {
+                const title = document.getElementById('form-asset-title').value.trim();
+                const genre = document.getElementById('form-asset-tag').value;
+                const fileInputs = document.querySelectorAll('.upload-episode-file-input');
+                const posterInput = document.getElementById('form-asset-poster');
+
+                if (!title) {
+                    alert("Validation Fault: Title cannot be empty.");
+                    return;
+                }
+
+                let structuredEpisodesArray = [];
+                fileInputs.forEach(input => {
+                    if (input.files && input.files[0]) {
+                        structuredEpisodesArray.push({
+                            name: input.getAttribute('data-epname'),
+                            url: URL.createObjectURL(input.files[0])
+                        });
+                    }
+                });
+
+                if (structuredEpisodesArray.length === 0) {
+                    alert("Validation Fault: Attach at least one video file stream.");
+                    return;
+                }
+
+                let posterUrl = "";
+                if (posterInput.files && posterInput.files[0]) {
+                    posterUrl = URL.createObjectURL(posterInput.files[0]);
+                }
+
+                const assetRecord = {
+                    id: Math.floor(Math.random() * 90000) + 10000,
+                    title: title,
+                    genre: genre,
+                    type: genre === "Movies" ? "Movie" : "Series",
+                    poster: posterUrl,
+                    episodes: structuredEpisodesArray
+                };
+
+                DB.store.unshift(assetRecord);
+                
+                if (DB.store.length === 1) {
+                    DB.heroSliderConfig.targetId = assetRecord.id;
+                    DB.heroSliderConfig.customDescription = "Freshly deployed anime package live now on ANIX.";
+                }
+
+                UI.toggleModal(false);
+                document.getElementById('form-asset-title').value = '';
+                this.refreshViews();
+                Router.go('home');
+            },
+            commitOngoingEpisodeAppend() {
+                const targetSelect = document.getElementById('form-update-select-target');
+                if(!targetSelect.value || targetSelect.value === "No Anime Created Yet") {
+                    alert("No active anime targets present to modify.");
+                    return;
+                }
+                
+                const targetId = parseInt(targetSelect.value);
+                const fileInput = document.getElementById('form-ongoing-new-file');
+                
+                if (!fileInput.files || !fileInput.files[0]) {
+                    alert("Select the upcoming episode video file stream first.");
+                    return;
+                }
+
+                const targetAnime = DB.store.find(item => item.id === targetId);
+                if (targetAnime) {
+                    const nextEpNum = targetAnime.episodes.length + 1;
+                    const nextEpLabel = `EP ${String(nextEpNum).padStart(2, '0')}`;
+                    
+                    targetAnime.episodes.push({
+                        name: nextEpLabel,
+                        url: URL.createObjectURL(fileInput.files[0])
+                    });
+
+                    alert(`Success: Linked ${nextEpLabel} to "${targetAnime.title}" live feed!`);
+                    fileInput.value = '';
+                    UI.toggleModal(false);
+                    this.refreshViews();
+                }
+            },
+            updateHeroSliderConfiguration() {
+                const targetSelect = document.getElementById('form-hero-select-target');
+                if(!targetSelect.value || targetSelect.value === "No Anime Created Yet") {
+                    alert("Please select a valid target anime title first.");
+                    return;
+                }
+
+                const selectedId = parseInt(targetSelect.value);
+                const descText = document.getElementById('form-hero-desc').value.trim();
+                const bannerInput = document.getElementById('form-hero-banner');
+
+                DB.heroSliderConfig.targetId = selectedId;
+                DB.heroSliderConfig.customDescription = descText ? descText : "No custom summary details provided.";
+                
+                if(bannerInput.files && bannerInput.files[0]) {
+                    DB.heroSliderConfig.bannerUrl = URL.createObjectURL(bannerInput.files[0]);
+                }
+
+                alert("Success: Home Showcase Hero slider setup has updated!");
+                UI.toggleModal(false);
+                this.renderHeroSlider();
+            },
+            execSearch() {
+                const query = document.getElementById('search-query-field').value.toLowerCase();
+                const resultsBox = document.getElementById('container-search-results');
+                const fallbackBox = document.getElementById('container-search-fallback');
+
+                resultsBox.innerHTML = '';
+                fallbackBox.innerHTML = '';
+                
+                if(DB.store.length === 0) {
+                    resultsBox.appendChild(UI.buildEmptyNotice("Database is clean. No searchable assets found."));
+                    return;
+                }
+
+                let matchCounter = 0;
+                DB.store.forEach(item => {
+                    if(query !== "" && item.title.toLowerCase().includes(query)) {
+                        resultsBox.appendChild(UI.buildCard(item));
+                        matchCounter++;
+                    } else {
+                        fallbackBox.appendChild(UI.buildCard(item));
+                    }
+                });
+
+                document.getElementById('search-output-header').innerText = query === "" ? 
+                    "Database Query Results" : `Database Query Results (${matchCounter} Matches)`;
+            },
+            bootCinemaMode(item) {
+                Router.go('watch');
+                document.getElementById('cinema-stream-title').innerText = item.title;
+                document.getElementById('episodes-count-badge').innerText = `${item.episodes.length} Episodes Live`;
+                
+                const nativePlayer = document.getElementById('player-engine');
+                const epBox = document.getElementById('container-pipeline-episodes');
+                const layoutBox = document.getElementById('cinema-layout-box');
+                const playlistCard = document.getElementById('cinema-playlist-card');
+                
+                epBox.innerHTML = '';
+
+                if(item.episodes.length > 0) {
+                    nativePlayer.src = item.episodes[0].url;
+                }
+
+                if (item.episodes.length <= 1) {
+                    layoutBox.classList.add('full-width-player');
+                    playlistCard.style.display = 'none';
+                } else {
+                    layoutBox.classList.remove('full-width-player');
+                    playlistCard.style.display = 'flex';
+                }
+
+                item.episodes.forEach((episode, index) => {
+                    const row = document.createElement('div');
+                    row.className = `ep-row ${index === 0 ? 'active' : ''}`;
+                    row.innerHTML = `
+                        <i class="ri-play-mini-fill"></i>
+                        <span style="font-size:0.9rem; font-weight:500;">${episode.name}</span>
+                    `;
+                    row.onclick = () => {
+                        document.querySelectorAll('.ep-row').forEach(r => r.classList.remove('active'));
+                        row.classList.add('active');
+                        nativePlayer.src = episode.url;
+                        nativePlayer.play();
+                    };
+                    epBox.appendChild(row);
+                });
+            },
+            goFullScreen() {
+                const player = document.getElementById('player-engine');
+                if (player.requestFullscreen) player.requestFullscreen();
+                else if (player.webkitRequestFullscreen) player.webkitRequestFullscreen();
+                else if (player.msRequestFullscreen) player.msRequestFullscreen();
+            }
+        };
+
+        window.onload = () => Engine.refreshViews();
+    </script>
+</body>
+</html>
